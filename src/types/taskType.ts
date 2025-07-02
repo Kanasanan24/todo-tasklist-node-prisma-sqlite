@@ -3,7 +3,8 @@ interface SearchTask {
   page: number,
   pageSize: number,
   sortField: "id" | "task_name" | "created_at",
-  sortOrder: "asc" | "desc"
+  sortOrder: "asc" | "desc",
+  completed: boolean
 }
 
 export {

@@ -11,11 +11,12 @@ const taskSchema = Joi.object({
 });
 
 const searchSchema = Joi.object({
-  search: Joi.string().allow("").max(150).required(),
-  page: Joi.number().integer().required(),
-  pageSize: Joi.number().integer().required(),
-  sortField: Joi.string().valid("id", "task_name", "created_at").required(),
-  sortOrder: Joi.string().valid("asc", "desc").required()
+  search: Joi.string().allow("").max(150).optional(),
+  page: Joi.number().integer().optional(),
+  pageSize: Joi.number().integer().optional(),
+  sortField: Joi.string().valid("id", "task_name", "created_at").optional(),
+  sortOrder: Joi.string().valid("asc", "desc").optional(),
+  completed_at: Joi.boolean().optional(),
 });
 
 const createTask = async(req:Request, res:Response) => {
@@ -55,14 +56,19 @@ const getTasks = async(req:Request<{}, {}, {}, SearchTask>, res:Response) => {
       )});
     }
     // query
-    const { search, page, pageSize, sortField, sortOrder } = req.query;
+    const { search = "", page = 1, pageSize = 15, sortField = "id", sortOrder = "asc", completed = false } = req.query;
     const parsePage = Number(page);
     const parsePageSize = Number(pageSize);
     const tasks = await prisma.tasks.findMany({
       where: {
-        OR: [
-          { task_name: { contains: search } },
-          { task_description: { contains: search } }
+        AND: [
+          {
+            OR: [
+              { task_name: { contains: search } },
+              { task_description: { contains: search } }
+            ]
+          },
+          completed ? { completed_at: { not: null } } : { completed_at: null }
         ]
       },
       skip: (parsePage - 1) * parsePageSize,
@@ -142,6 +148,8 @@ const deleteTask = async(req:Request, res:Response) => {
     if (!task_id) return res.status(400).json({ message: "The task was not found." });
     // delete
     await prisma.tasks.delete({ where: { id: Number(task_id) } });
+    // update cache
+    await prisma.cacheStorages.update({where: { cache_name: "cache_tasks" }, data: { cache_total: { decrement: 1 } }});
     // response
     return res.status(200).json({ message: "The task was deleted successfully." });
   } catch (error) {
