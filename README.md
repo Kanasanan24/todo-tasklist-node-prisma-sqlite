@@ -23,43 +23,43 @@
 - เปิด CLI (Command Line Interface) ในเส้นทางของ Project นี้ และทำการติดตั้ง Package
 
 ```
-  C:\...\todo-tasklist-node-prisma-sqlite> npm install
+  npm install
 ```
 
 - Setup SQLite
 
 ```
-  C:\...\todo-tasklist-node-prisma-sqlite> prisma generate
+  prisma generate
 ```
 
 - อัพโหลด Model เข้า SQLite
 
 ```
-  C:\...\todo-tasklist-node-prisma-sqlite> npx prisma migrate dev --name initial-project-model
+  npx prisma migrate dev --name initial-project-model
 ```
 
 - ทำการ Compile จาก Typescript เป็น Javascript
 
 ```
-  C:\...\todo-tasklist-node-prisma-sqlite> npm run build
+  npm run build
 ```
 
 - Run seed เพื่อเตรียมเก็บ Cache ของ Task
 
 ```
-  C:\...\todo-tasklist-node-prisma-sqlite> npm run seed
+  npm run seed
 ```
 
 - Run server
 
 ```
-  C:\...\todo-tasklist-node-prisma-sqlite> npm run start หรือ npm start
+  npm run start หรือ npm start
 ```
 ## API Reference
 
 #### Get tasks
 
-```http
+```
   GET /api/task/pagination
 ```
 
@@ -74,7 +74,7 @@
 
 #### Get task by id
 
-```http
+```
   GET /api/tasks/:task_id
 ```
 
@@ -84,7 +84,7 @@
 
 #### Create task
 
-```http
+```
   POST /api/task/create
 ```
 | Parameter | Type     | Description                |
@@ -96,7 +96,7 @@
 
 #### Update task
 
-```http
+```
   PUT /api/task/update/:task_id
 ```
 
@@ -113,7 +113,7 @@
 
 #### Delete task
 
-```http
+```
   DELETE /api/task/delete/:task_id
 ```
 
