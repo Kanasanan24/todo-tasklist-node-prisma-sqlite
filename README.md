@@ -20,6 +20,13 @@
   git clone https://github.com/Kanasanan24/todo-tasklist-node-prisma-sqlite.git
 ```
 
+- สร้าง .env ไฟล์และโดยสร้างข้อมูลตามตัวอย่างใน .env.example
+
+```
+  PORT=your_port
+  DATABASE_URL=your_database_path(default:"file:./dev.db")
+```
+
 - เปิด CLI (Command Line Interface) ในเส้นทางของ Project นี้ และทำการติดตั้ง Package
 
 ```
